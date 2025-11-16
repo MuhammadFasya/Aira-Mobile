@@ -62,6 +62,57 @@ If everything is set up correctly, you should see your new app running in the An
 
 This is one way to run your app — you can also build it directly from Android Studio or Xcode.
 
+## Important: run the Aira web backend first
+
+This mobile app integrates with the Aira web backend for features such as user profiles, session history and generative responses. To use the mobile app end-to-end you should run the web/backend first.
+
+1. Clone the Aira web repository (replace the URL with your web repo):
+
+```powershell
+git clone https://github.com/<your-org>/aira-web.git
+cd aira-web
+```
+
+2. Start the backend server:
+
+```powershell
+cd backend
+# (optional) create and activate a virtual environment
+python -m venv .venv
+. .venv/Scripts/activate
+pip install -r requirements.txt
+python app.py
+```
+
+Take note of the backend URL (for example `http://localhost:5000`).
+
+3. Configure mobile to reach the backend
+
+- Update any client endpoints in `src/utils/api.ts` to point to your backend URL. When running on the Android emulator use `http://10.0.2.2:5000` to reach a host machine's localhost.
+- If you rely on the Netlify serverless proxy (`netlify/functions/generate.js`) make sure that it is configured (or that the web backend is reachable) because some features (history, user storage) depend on it.
+
+4. Run the mobile app
+
+```powershell
+# from the mobile repo root
+npm start
+npm run android   # or npm run ios
+```
+
+Notes
+
+- If you want to pick images from device gallery, install and rebuild with `react-native-image-picker`:
+
+```powershell
+npm install react-native-image-picker
+npx pod-install   # iOS only
+# Rebuild the app after new native deps
+npm run android
+npm run ios
+```
+
+If you want, tell me the exact URL of your Aira web repo and I can add the concrete clone URL and any backend env var notes to this README.
+
 ## Step 3: Modify your app
 
 Now that you have successfully run the app, let's make changes!

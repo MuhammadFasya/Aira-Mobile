@@ -1,3 +1,10 @@
+/**
+ * LoginScreenCanonical
+ * - Simple login / signup screen used by the app.
+ * - Keeps a compact UI and delegates real auth to the app context.
+ * - Native headers are hidden so this screen renders its own in-screen
+ *   UI elements.
+ */
 import React, { useState } from 'react';
 import {
   View,
@@ -18,6 +25,8 @@ export default function LoginScreenCanonical({ navigation }: any) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const { setUser } = useAuth();
 
@@ -90,34 +99,53 @@ export default function LoginScreenCanonical({ navigation }: any) {
           </View>
 
           <Text style={styles.header}>
-            {isSignup ? 'Create account' : 'Welcome back'}
+            {isSignup ? 'Create account' : 'Welcome to Aira'}
           </Text>
 
           <TextInput
             style={styles.input}
             placeholder="Email"
+            placeholderTextColor="#6B7280"
             autoCapitalize="none"
             keyboardType="email-address"
             value={email}
             onChangeText={setEmail}
           />
 
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
-          />
-
-          {isSignup && (
+          <View style={styles.inputWrap}>
             <TextInput
               style={styles.input}
-              placeholder="Confirm Password"
-              secureTextEntry
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
+              placeholder="Password"
+              placeholderTextColor="#6B7280"
+              secureTextEntry={!showPassword}
+              value={password}
+              onChangeText={setPassword}
             />
+            <TouchableOpacity
+              style={styles.eyeButton}
+              onPress={() => setShowPassword(s => !s)}
+            >
+              <Text style={styles.eyeText}>{showPassword ? '🙈' : '👁️'}</Text>
+            </TouchableOpacity>
+          </View>
+
+          {isSignup && (
+            <View style={styles.inputWrap}>
+              <TextInput
+                style={styles.input}
+                placeholder="Confirm Password"
+                placeholderTextColor="#6B7280"
+                secureTextEntry={!showConfirm}
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+              />
+              <TouchableOpacity
+                style={styles.eyeButton}
+                onPress={() => setShowConfirm(s => !s)}
+              >
+                <Text style={styles.eyeText}>{showConfirm ? '🙈' : '👁️'}</Text>
+              </TouchableOpacity>
+            </View>
           )}
 
           {errorMsg ? <Text style={styles.error}>{errorMsg}</Text> : null}
@@ -134,9 +162,14 @@ export default function LoginScreenCanonical({ navigation }: any) {
           <Text style={styles.or}>OR</Text>
 
           <TouchableOpacity
-            style={styles.google}
+            style={[styles.google, styles.googleSized]}
             onPress={() => handleAuth('google')}
           >
+            <Image
+              source={require('../assets/icons/google-logo.png')}
+              style={styles.googleLogo}
+              resizeMode="contain"
+            />
             <Text style={styles.googleText}>Continue with Google</Text>
           </TouchableOpacity>
 
@@ -177,6 +210,13 @@ const styles = StyleSheet.create({
     borderColor: '#E6EEF8',
     marginBottom: 12,
   },
+  inputWrap: { width: '100%', position: 'relative' },
+  eyeButton: {
+    position: 'absolute',
+    right: 12,
+    top: Platform.OS === 'ios' ? 12 : 10,
+  },
+  eyeText: { color: '#4F46E5', fontWeight: '600' },
   primary: {
     backgroundColor: '#6366F1',
     paddingVertical: 12,
@@ -200,6 +240,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   googleText: { color: '#0F172A' },
+  googleSized: {
+    width: '72%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
+  googleLogo: { width: 20, height: 20, marginRight: 10 },
   switchRow: { flexDirection: 'row', justifyContent: 'center', marginTop: 16 },
   link: { color: '#4F46E5', fontWeight: '600' },
   topTitle: {

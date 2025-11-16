@@ -32,7 +32,7 @@ export default function SideBar({
   const [anim] = useState(new Animated.Value(visible ? 0 : -1));
   const navigation = useNavigation();
   const [active, setActive] = useState<string | null>(null);
-  const [historyOpen, setHistoryOpen] = useState(true);
+  const [historyOpen, setHistoryOpen] = useState(false);
   const { user } = useAuth();
 
   React.useEffect(() => {
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
     tintColor: '#93C5FD',
     position: 'absolute',
     right: 12,
-    top: 24, // nudged slightly down so dropdown aligns visually with center
+    top: 26, // nudged slightly down so dropdown aligns visually with center (+2px)
   },
   historyRight: { width: 40, alignItems: 'center', justifyContent: 'center' },
 

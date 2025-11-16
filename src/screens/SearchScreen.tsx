@@ -63,11 +63,16 @@ export default function SearchScreen({ route, navigation }: any) {
                 />
               </TouchableOpacity>
 
-              <Image
-                source={require('../assets/icons/AIRA 1 (Smiley Logo) - Varian 1.png')}
-                style={styles.headerLogo}
-              />
-              <Text style={styles.headerTitle}>Aira</Text>
+              <TouchableOpacity
+                style={styles.headerLogoGroup}
+                onPress={() => navigation.navigate('Home')}
+              >
+                <Image
+                  source={require('../assets/icons/AIRA 1 (Smiley Logo) - Varian 1.png')}
+                  style={styles.headerLogo}
+                />
+                <Text style={styles.headerTitle}>Aira</Text>
+              </TouchableOpacity>
             </View>
 
             <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -86,6 +91,18 @@ export default function SearchScreen({ route, navigation }: any) {
               onChangeText={setQ}
               style={styles.input}
             />
+
+            {/* clear button: shown when there is text */}
+            {q ? (
+              <TouchableOpacity
+                style={styles.clearButton}
+                onPress={() => setQ('')}
+                accessibilityLabel="Clear search"
+              >
+                <Text style={styles.clearText}>✕</Text>
+              </TouchableOpacity>
+            ) : null}
+
             <TouchableOpacity
               style={styles.searchButton}
               onPress={() => {
@@ -93,7 +110,6 @@ export default function SearchScreen({ route, navigation }: any) {
               }}
             >
               <Image
-                // using existing Search 2 - Primary as the project doesn't contain 'searchPink - primary.png'
                 source={require('../assets/icons/searchPink - primary.png')}
                 style={styles.searchBtnIcon}
               />
@@ -144,6 +160,11 @@ const styles = StyleSheet.create({
   },
   headerSearchIcon: { width: 22, height: 22, tintColor: '#60A5FA' },
   headerLeftGroup: { flexDirection: 'row', alignItems: 'center' },
+  headerLogoGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 12,
+  },
   headerLogo: { width: 28, height: 28, marginRight: 8 },
   headerTitle: { color: '#60A5FA', fontSize: 16 },
   headerClose: { fontSize: 18, color: '#94A3B8' },
@@ -170,6 +191,16 @@ const styles = StyleSheet.create({
   },
   // make the in-input search icon 1.5x (was 20)
   searchBtnIcon: { width: 30, height: 30 },
+  clearButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 8,
+    backgroundColor: 'transparent',
+  },
+  clearText: { color: '#6B7280', fontSize: 16 },
   row: {
     paddingVertical: 12,
     borderBottomWidth: 1,

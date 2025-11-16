@@ -1,3 +1,14 @@
+/**
+ * ProfileScreen
+ * - Allows the user to view and edit their profile (name, email, avatar).
+ * - Avatar can be set via URL or chosen from device (uses
+ *   `react-native-image-picker` if installed).
+ * - Uses AuthContext (`useAuth`) to persist the user in-app state only.
+ *
+ * Note: this component intentionally uses a dynamic require for the
+ * image-picker to keep the app runnable if the native package is not
+ * installed. See `pickImageFromDevice` for details and user guidance.
+ */
 import React, { useState } from 'react';
 import {
   View,
@@ -23,6 +34,38 @@ export default function ProfileScreen({ navigation }: any) {
   const applyProfile = () => {
     setUser({ email, name, avatar: avatarUrl || null });
     Alert.alert('Saved', 'Profile updated');
+  };
+
+  const pickImageFromDevice = async () => {
+    try {
+      // dynamic require so app still runs when the native lib is not installed
+      const rnPicker = require('react-native-image-picker');
+      const launch =
+        rnPicker.launchImageLibrary || rnPicker.launchImageLibraryWithOptions;
+      const opts = { mediaType: 'photo', selectionLimit: 1, quality: 0.8 };
+      // modern API uses callback-style
+      launch(opts, (response: any) => {
+        if (!response) return;
+        if (response.didCancel) return;
+        if (response.errorCode) {
+          Alert.alert('Error', response.errorMessage || 'Could not pick image');
+          return;
+        }
+        const uri =
+          response.assets && response.assets[0] && response.assets[0].uri;
+        if (uri) {
+          setAvatarUrl(uri);
+          setUser({ email, name, avatar: uri });
+          setEditingAvatar(false);
+        }
+      });
+    } catch {
+      // library not installed or runtime error
+      Alert.alert(
+        'Image picker not available',
+        'To choose a photo from your device, install and configure react-native-image-picker, then rebuild the app.\n\nQuick steps:\n1) yarn add react-native-image-picker\n2) npx pod-install (iOS)\n3) Rebuild the app\\n\nYou can also paste an image URL in the field below.',
+      );
+    }
   };
 
   const handleLogout = () => {
@@ -91,12 +134,18 @@ export default function ProfileScreen({ navigation }: any) {
             />
           </View>
 
-          <TouchableOpacity style={styles.logout} onPress={handleLogout}>
-            <Text style={styles.logoutText}>LOG OUT</Text>
+          <TouchableOpacity
+            style={[styles.save, styles.actionSized]}
+            onPress={applyProfile}
+          >
+            <Text style={styles.saveText}>Save</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.save} onPress={applyProfile}>
-            <Text style={styles.saveText}>Save</Text>
+          <TouchableOpacity
+            style={[styles.logout, styles.actionSized]}
+            onPress={handleLogout}
+          >
+            <Text style={styles.logoutText}>LOG OUT</Text>
           </TouchableOpacity>
         </View>
 
@@ -119,6 +168,12 @@ export default function ProfileScreen({ navigation }: any) {
                   }}
                 >
                   <Text>Use default</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.modalButton}
+                  onPress={() => pickImageFromDevice()}
+                >
+                  <Text>Choose from device</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={[styles.modalButton, styles.modalPrimary]}
@@ -187,7 +242,6 @@ const styles = StyleSheet.create({
   logout: {
     backgroundColor: '#FA7268',
     paddingVertical: 12,
-    paddingHorizontal: 40,
     borderRadius: 12,
     marginTop: 12,
   },
@@ -201,6 +255,12 @@ const styles = StyleSheet.create({
     borderColor: '#E6EEF8',
   },
   saveText: { color: '#0F172A' },
+  actionSized: {
+    width: '72%',
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   modalBackdrop: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.35)',
