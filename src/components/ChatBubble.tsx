@@ -17,7 +17,9 @@ function Avatar({ isUser }: { isUser: boolean }) {
   // Prefer user's profile avatar if available
   const uri = user?.avatar;
   if (uri) {
-    return <Image source={{ uri }} style={[styles.avatarImage, styles.avatarUser]} />;
+    return (
+      <Image source={{ uri }} style={[styles.avatarImage, styles.avatarUser]} />
+    );
   }
 
   return (
