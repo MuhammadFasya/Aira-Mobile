@@ -1,7 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
+import { useAuth } from '../context/AuthContext';
 
 function Avatar({ isUser }: { isUser: boolean }) {
+  const { user } = useAuth();
+
   if (!isUser) {
     return (
       <Image
@@ -9,6 +12,12 @@ function Avatar({ isUser }: { isUser: boolean }) {
         style={[styles.avatarImage, styles.avatarAira]}
       />
     );
+  }
+
+  // Prefer user's profile avatar if available
+  const uri = user?.avatar;
+  if (uri) {
+    return <Image source={{ uri }} style={[styles.avatarImage, styles.avatarUser]} />;
   }
 
   return (

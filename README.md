@@ -66,10 +66,10 @@ This is one way to run your app — you can also build it directly from Android 
 
 This mobile app integrates with the Aira web backend for features such as user profiles, session history and generative responses. To use the mobile app end-to-end you should run the web/backend first.
 
-1. Clone the Aira web repository (replace the URL with your web repo):
+1. Clone the Aira web repository :
 
 ```powershell
-git clone https://github.com/<your-org>/aira-web.git
+git clone https://github.com/MuhammadFasya/Aira.git
 cd aira-web
 ```
 
@@ -88,7 +88,7 @@ Take note of the backend URL (for example `http://localhost:5000`).
 
 3. Configure mobile to reach the backend
 
-- Update any client endpoints in `src/utils/api.ts` to point to your backend URL. When running on the Android emulator use `http://10.0.2.2:5000` to reach a host machine's localhost.
+- Update any client endpoints in `screens/Homescreen.tsx` to point to your backend URL. When running on the Android emulator use `http://10.0.2.2:5000` to reach a host machine's localhost.
 - If you rely on the Netlify serverless proxy (`netlify/functions/generate.js`) make sure that it is configured (or that the web backend is reachable) because some features (history, user storage) depend on it.
 
 4. Run the mobile app
@@ -111,8 +111,6 @@ npm run android
 npm run ios
 ```
 
-If you want, tell me the exact URL of your Aira web repo and I can add the concrete clone URL and any backend env var notes to this README.
-
 ## Step 3: Modify your app
 
 Now that you have successfully run the app, let's make changes!
@@ -124,14 +122,9 @@ When you want to forcefully reload, for example to reset the state of your app, 
 - **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
 - **iOS**: Press <kbd>R</kbd> in iOS Simulator.
 
-## Congratulations! :tada:
+## Congratulations!
 
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+You've successfully run and modified your React Native App.
 
 # Troubleshooting
 

@@ -31,7 +31,8 @@ interface Message {
   createdAt?: number;
 }
 
-// Wajib: Replace local IP, e.g. 192.168.1.12
+// Wajib: Replace local IP with your backend server address and must in the same connection
+// Just see the output from running the app.py from the Aira Web Version
 const API_ENDPOINT = 'http://192.168.160.241:5000/chat';
 
 export default function HomeScreen() {
